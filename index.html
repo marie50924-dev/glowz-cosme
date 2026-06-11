@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GLOWZ✦COSME - ほしいコスメに出会えるアプリ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #0b0b16;
+    --pink: #ff5fb4;
+    --cyan: #4de8ff;
+    --violet: #b68cff;
+    --text: #f5f2ff;
+    --muted: #9d97b8;
+    --card: rgba(255,255,255,0.055);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { background: var(--bg); color: var(--text); }
+  body {
+    font-family: 'M PLUS Rounded 1c', -apple-system, sans-serif;
+    min-height: 100vh;
+    background:
+      radial-gradient(600px 400px at 85% -5%, rgba(255,95,180,0.18), transparent 70%),
+      radial-gradient(500px 380px at -10% 25%, rgba(77,232,255,0.13), transparent 70%),
+      radial-gradient(700px 500px at 50% 110%, rgba(182,140,255,0.12), transparent 70%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+  #root { max-width: 560px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* ---- ヘッダー ---- */
+  .logo {
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: 0.04em;
+    text-align: center;
+    padding: 14px 0 2px;
+    background: linear-gradient(100deg, var(--pink) 10%, var(--violet) 45%, var(--cyan) 85%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: holo 6s ease-in-out infinite alternate;
+  }
+  @keyframes holo { from { background-position: 0% 0; } to { background-position: 100% 0; } }
+  @media (prefers-reduced-motion: reduce) { .logo { animation: none; } }
+  .tagline { text-align: center; color: var(--muted); font-size: 12.5px; margin-bottom: 22px; }
+
+  /* ---- 検索カード ---- */
+  .search-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 22px;
+    padding: 18px 16px;
+    backdrop-filter: blur(8px);
+  }
+  .search-label { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .search-label .spark { color: var(--pink); }
+  textarea {
+    width: 100%;
+    min-height: 84px;
+    background: rgba(11,11,22,0.6);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 12px 14px;
+    resize: none;
+    outline: none;
+  }
+  textarea:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255,95,180,0.18); }
+  textarea::placeholder { color: #6e6890; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip {
+    border: 1px solid rgba(255,255,255,0.16);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 6px 13px;
+    font-size: 12.5px;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .chip.on { border-color: var(--cyan); color: var(--cyan); background: rgba(77,232,255,0.1); }
+
+  .budget-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+  .budget-row label { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  select {
+    flex: 1;
+    background: rgba(11,11,22,0.6);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13.5px;
+    padding: 9px 10px;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .go-btn {
+    width: 100%;
+    margin-top: 16px;
+    border: none;
+    border-radius: 999px;
+    padding: 15px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #1a0a14;
+    background: linear-gradient(100deg, var(--pink), var(--violet) 60%, var(--cyan));
+    box-shadow: 0 4px 22px rgba(255,95,180,0.35);
+  }
+  .go-btn:disabled { opacity: 0.45; box-shadow: none; }
+  .count-note { text-align: center; color: var(--muted); font-size: 11.5px; margin-top: 10px; }
+
+  /* ---- ローディング ---- */
+  .loading { text-align: center; padding: 44px 0 20px; color: var(--muted); font-size: 14px; }
+  .loading .star {
+    display: inline-block;
+    font-size: 30px;
+    color: var(--pink);
+    animation: spin 1.6s linear infinite;
+    margin-bottom: 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---- 結果カード(プリズム枠が GLOWZ の signature) ---- */
+  .results-title { font-size: 14px; font-weight: 700; margin: 26px 0 12px; color: var(--cyan); }
+  .product {
+    position: relative;
+    border-radius: 20px;
+    padding: 1.5px; /* プリズム枠の太さ */
+    background: linear-gradient(135deg, rgba(255,95,180,0.7), rgba(182,140,255,0.55), rgba(77,232,255,0.7));
+    margin-bottom: 16px;
+  }
+  .product-inner {
+    background: #141222;
+    border-radius: 18.5px;
+    padding: 16px;
+  }
+  .p-brand { font-size: 11.5px; color: var(--cyan); font-weight: 700; letter-spacing: 0.06em; }
+  .p-name { font-size: 16.5px; font-weight: 800; margin: 3px 0 6px; line-height: 1.45; }
+  .p-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 9px; }
+  .pill {
+    font-size: 11px;
+    border-radius: 999px;
+    padding: 3px 10px;
+    background: rgba(255,95,180,0.14);
+    color: var(--pink);
+    font-weight: 700;
+  }
+  .pill.cat { background: rgba(182,140,255,0.16); color: var(--violet); }
+  .p-point { font-size: 13.5px; line-height: 1.75; color: #d8d3ec; }
+  .p-buy { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .p-actions { display: flex; gap: 9px; margin-top: 13px; }
+  .act {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 10px 0;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: var(--text);
+    background: transparent;
+  }
+  .act.line { background: #06C755; border-color: #06C755; color: #fff; }
+
+  .error-box {
+    margin-top: 22px;
+    border: 1px solid rgba(255,95,180,0.4);
+    background: rgba(255,95,180,0.08);
+    border-radius: 16px;
+    padding: 16px;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .empty { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 12px; line-height: 2; }
+  .footer { text-align: center; color: #57527a; font-size: 10.5px; margin-top: 40px; line-height: 1.8; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState } = React;
+
+const CATEGORIES = ["リップ", "ベースメイク", "アイメイク", "チーク", "スキンケア", "ネイル", "香水"];
+const BUDGETS = ["指定なし", "〜1,500円", "〜3,000円", "〜5,000円", "デパコスもOK"];
+const DAILY_LIMIT = 10;
+
+// 1日の検索回数をlocalStorageで管理
+function getTodayCount() {
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const saved = JSON.parse(localStorage.getItem("glowz_count") || "{}");
+    return saved.date === today ? saved.count : 0;
+  } catch (e) { return 0; }
+}
+function addTodayCount() {
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const count = getTodayCount() + 1;
+    localStorage.setItem("glowz_count", JSON.stringify({ date: today, count }));
+    return count;
+  } catch (e) { return 0; }
+}
+
+function App() {
+  const [query, setQuery] = useState("");
+  const [cats, setCats] = useState([]);
+  const [budget, setBudget] = useState("指定なし");
+  const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState(null);
+  const [error, setError] = useState("");
+  const [used, setUsed] = useState(getTodayCount());
+
+  const toggleCat = (c) => {
+    setCats(cats.includes(c) ? cats.filter(x => x !== c) : [...cats, c]);
+  };
+
+  const search = async () => {
+    if (!query.trim() && cats.length === 0) {
+      setError("どんなコスメに出会いたいか、ひとこと入れてみてね");
+      return;
+    }
+    if (getTodayCount() >= DAILY_LIMIT) {
+      setError("今日の検索回数の上限に届きました。また明日✦");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    setProducts(null);
+    try {
+      const res = await fetch("/api/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: query.trim(), categories: cats, budget })
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "検索に失敗しました");
+      }
+      setProducts(data.products || []);
+      setUsed(addTodayCount());
+    } catch (e) {
+      setError("うまく探せませんでした。少し時間をおいて、もう一度試してみてね。(" + e.message + ")");
+    }
+    setLoading(false);
+  };
+
+  const lineShare = (p) => {
+    const text = `✦GLOWZ COSMEで見つけたよ✦\n${p.brand} ${p.name}\n${p.price}\n${p.point}`;
+    return "https://line.me/R/share?text=" + encodeURIComponent(text);
+  };
+  const googleLink = (p) => {
+    return "https://www.google.com/search?q=" + encodeURIComponent(p.brand + " " + p.name);
+  };
+
+  return (
+    <div>
+      <div className="logo">GLOWZ✦COSME</div>
+      <div className="tagline">ことばで探す、わたしのコスメ</div>
+
+      <div className="search-card">
+        <div className="search-label"><span className="spark">✦</span> どんなコスメに出会いたい?</div>
+        <textarea
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="例: 毛穴が目立たなくなる下地がほしい / ブルベ夏に合うピンクのリップ / 学校でもバレない色付きリップ"
+        />
+        <div className="chips">
+          {CATEGORIES.map(c => (
+            <button key={c} className={"chip" + (cats.includes(c) ? " on" : "")} onClick={() => toggleCat(c)}>
+              {c}
+            </button>
+          ))}
+        </div>
+        <div className="budget-row">
+          <label>予算</label>
+          <select value={budget} onChange={e => setBudget(e.target.value)}>
+            {BUDGETS.map(b => <option key={b} value={b}>{b}</option>)}
+          </select>
+        </div>
+        <button className="go-btn" onClick={search} disabled={loading}>
+          {loading ? "さがしています…" : "ぴったりを探す ✦"}
+        </button>
+        <div className="count-note">今日あと {Math.max(0, DAILY_LIMIT - used)} 回 さがせます</div>
+      </div>
+
+      {loading && (
+        <div className="loading">
+          <div className="star">✦</div>
+          <div>いま日本で買えるコスメを調べています…</div>
+        </div>
+      )}
+
+      {error && <div className="error-box">{error}</div>}
+
+      {products && products.length > 0 && (
+        <div>
+          <div className="results-title">✦ あなたにぴったりの {products.length} 個</div>
+          {products.map((p, i) => (
+            <div className="product" key={i}>
+              <div className="product-inner">
+                <div className="p-brand">{p.brand}</div>
+                <div className="p-name">{p.name}</div>
+                <div className="p-meta">
+                  <span className="pill">{p.price}</span>
+                  {p.category && <span className="pill cat">{p.category}</span>}
+                </div>
+                <div className="p-point">{p.point}</div>
+                {p.buy && <div className="p-buy">🛍 {p.buy}</div>}
+                <div className="p-actions">
+                  <a className="act line" href={lineShare(p)} target="_blank" rel="noopener">LINEで共有</a>
+                  <a className="act" href={googleLink(p)} target="_blank" rel="noopener">くわしく見る</a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {products && products.length === 0 && (
+        <div className="empty">
+          ぴったりの商品が見つかりませんでした。<br />
+          ことばを少し変えて、もう一度さがしてみてね✦
+        </div>
+      )}
+
+      <div className="footer">
+        GLOWZ✦COSME — AIが提案する参考情報です。<br />
+        価格や在庫は変わることがあるので、購入前に公式情報を確認してね。
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

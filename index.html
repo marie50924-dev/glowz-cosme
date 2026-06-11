@@ -11,13 +11,13 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
   :root {
-    --bg: #0b0b16;
-    --pink: #ff5fb4;
-    --cyan: #4de8ff;
-    --violet: #b68cff;
-    --text: #f5f2ff;
-    --muted: #9d97b8;
-    --card: rgba(255,255,255,0.055);
+    --bg: #fff7fb;
+    --pink: #ff6fb5;
+    --cyan: #8a63e8;
+    --violet: #b79cff;
+    --text: #4a3550;
+    --muted: #a98bb8;
+    --card: #ffffff;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { background: var(--bg); color: var(--text); }
@@ -25,9 +25,8 @@
     font-family: 'M PLUS Rounded 1c', -apple-system, sans-serif;
     min-height: 100vh;
     background:
-      radial-gradient(600px 400px at 85% -5%, rgba(255,95,180,0.18), transparent 70%),
-      radial-gradient(500px 380px at -10% 25%, rgba(77,232,255,0.13), transparent 70%),
-      radial-gradient(700px 500px at 50% 110%, rgba(182,140,255,0.12), transparent 70%),
+      radial-gradient(600px 400px at 85% -5%, rgba(255,111,181,0.16), transparent 70%),
+      radial-gradient(500px 380px at -10% 25%, rgba(183,156,255,0.16), transparent 70%),
       var(--bg);
     background-attachment: fixed;
   }
@@ -40,7 +39,7 @@
     letter-spacing: 0.04em;
     text-align: center;
     padding: 14px 0 2px;
-    background: linear-gradient(100deg, var(--pink) 10%, var(--violet) 45%, var(--cyan) 85%);
+    background: linear-gradient(100deg, var(--pink) 15%, var(--violet) 85%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -54,18 +53,18 @@
   /* ---- 検索カード ---- */
   .search-card {
     background: var(--card);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid #ffd9ec;
     border-radius: 22px;
     padding: 18px 16px;
-    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 28px rgba(255,111,181,0.12);
   }
   .search-label { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
   .search-label .spark { color: var(--pink); }
   textarea {
     width: 100%;
     min-height: 84px;
-    background: rgba(11,11,22,0.6);
-    border: 1px solid rgba(255,255,255,0.14);
+    background: #fdf3f9;
+    border: 1.5px solid #ffd9ec;
     border-radius: 14px;
     color: var(--text);
     font-family: inherit;
@@ -76,12 +75,12 @@
     outline: none;
   }
   textarea:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255,95,180,0.18); }
-  textarea::placeholder { color: #6e6890; }
+  textarea::placeholder { color: #c2a8cf; }
 
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
   .chip {
-    border: 1px solid rgba(255,255,255,0.16);
-    background: transparent;
+    border: 1.5px solid #f0dcf5;
+    background: #ffffff;
     color: var(--muted);
     border-radius: 999px;
     padding: 6px 13px;
@@ -89,14 +88,14 @@
     font-family: inherit;
     font-weight: 500;
   }
-  .chip.on { border-color: var(--cyan); color: var(--cyan); background: rgba(77,232,255,0.1); }
+  .chip.on { border-color: var(--violet); color: var(--cyan); background: #f4eeff; }
 
   .budget-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
   .budget-row label { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
   select {
     flex: 1;
-    background: rgba(11,11,22,0.6);
-    border: 1px solid rgba(255,255,255,0.14);
+    background: #fdf3f9;
+    border: 1.5px solid #ffd9ec;
     border-radius: 10px;
     color: var(--text);
     font-family: inherit;
@@ -116,9 +115,9 @@
     font-size: 16px;
     font-weight: 800;
     letter-spacing: 0.05em;
-    color: #1a0a14;
-    background: linear-gradient(100deg, var(--pink), var(--violet) 60%, var(--cyan));
-    box-shadow: 0 4px 22px rgba(255,95,180,0.35);
+    color: #ffffff;
+    background: linear-gradient(100deg, var(--pink), var(--violet));
+    box-shadow: 0 6px 20px rgba(255,111,181,0.35);
   }
   .go-btn:disabled { opacity: 0.45; box-shadow: none; }
   .count-note { text-align: center; color: var(--muted); font-size: 11.5px; margin-top: 10px; }
@@ -140,11 +139,11 @@
     position: relative;
     border-radius: 20px;
     padding: 1.5px; /* プリズム枠の太さ */
-    background: linear-gradient(135deg, rgba(255,95,180,0.7), rgba(182,140,255,0.55), rgba(77,232,255,0.7));
+    background: linear-gradient(135deg, #ffb3d9, #d4c2ff);
     margin-bottom: 16px;
   }
   .product-inner {
-    background: #141222;
+    background: #ffffff;
     border-radius: 18.5px;
     padding: 16px;
   }
@@ -155,12 +154,12 @@
     font-size: 11px;
     border-radius: 999px;
     padding: 3px 10px;
-    background: rgba(255,95,180,0.14);
-    color: var(--pink);
+    background: #ffe3f1;
+    color: #e0559a;
     font-weight: 700;
   }
-  .pill.cat { background: rgba(182,140,255,0.16); color: var(--violet); }
-  .p-point { font-size: 13.5px; line-height: 1.75; color: #d8d3ec; }
+  .pill.cat { background: #efe8ff; color: #8a63e8; }
+  .p-point { font-size: 13.5px; line-height: 1.75; color: #6d5a78; }
   .p-buy { font-size: 12px; color: var(--muted); margin-top: 8px; }
   .p-actions { display: flex; gap: 9px; margin-top: 13px; }
   .act {
@@ -172,23 +171,23 @@
     font-size: 13px;
     font-weight: 700;
     font-family: inherit;
-    border: 1px solid rgba(255,255,255,0.18);
-    color: var(--text);
-    background: transparent;
+    border: 1.5px solid #f0dcf5;
+    color: #8a63e8;
+    background: #ffffff;
   }
   .act.line { background: #06C755; border-color: #06C755; color: #fff; }
 
   .error-box {
     margin-top: 22px;
-    border: 1px solid rgba(255,95,180,0.4);
-    background: rgba(255,95,180,0.08);
+    border: 1px solid #ffb3d9;
+    background: #fff0f7;
     border-radius: 16px;
     padding: 16px;
     font-size: 13.5px;
     line-height: 1.7;
   }
   .empty { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 12px; line-height: 2; }
-  .footer { text-align: center; color: #57527a; font-size: 10.5px; margin-top: 40px; line-height: 1.8; }
+  .footer { text-align: center; color: #c5aed2; font-size: 10.5px; margin-top: 40px; line-height: 1.8; }
 </style>
 </head>
 <body>

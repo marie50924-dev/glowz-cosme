@@ -90,7 +90,7 @@ JSON形式:
           const rkRes = await fetch(
                         "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601?" + params.toString(),
                         { headers: { Referer: "https://glowz-cosme.vercel.app/", Origin: "https://glowz-cosme.vercel.app" } }
-^_^
+
 
           );
           if (!rkRes.ok) throw new Error("rakuten status " + rkRes.status);

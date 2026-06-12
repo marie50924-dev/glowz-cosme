@@ -80,13 +80,17 @@ JSON形式:
         try {
           const params = new URLSearchParams({
             applicationId: process.env.RAKUTEN_APP_ID,
+                        accessKey: process.env.RAKUTEN_ACCESS_KEY,
+
             keyword: keyword,
             hits: "1",
             sort: "standard",
             formatVersion: "2"
           });
           const rkRes = await fetch(
-            "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?" + params.toString()
+                        "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601?" + params.toString(),
+            { headers: { Referer: "https://glowz-cosme.vercel.app/" } }
+
           );
           if (!rkRes.ok) throw new Error("rakuten status " + rkRes.status);
           const rkData = await rkRes.json();

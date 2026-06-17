@@ -47,11 +47,11 @@ export default async function handler(req, res) {
     }
 
     // --- Gemini API へのリクエスト本体 ---
+    // 新形式キー(AQ.で始まる)は ?key= ではなく x-goog-api-key ヘッダーで渡す
     const url =
       "https://generativelanguage.googleapis.com/v1beta/models/" +
       MODEL +
-      ":generateContent?key=" +
-      apiKey;
+      ":generateContent";
 
     const geminiBody = {
       contents: [
@@ -76,7 +76,10 @@ export default async function handler(req, res) {
 
     const gRes = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey,
+      },
       body: JSON.stringify(geminiBody),
     });
 

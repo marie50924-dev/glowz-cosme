@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>GLOWZ✦COSME — 変身スタジオ</title>
+<style>
+  /* ============================================================
+     GLOWZ✦COSME  変身スタジオ
+     cyber-cute / holographic
+     ============================================================ */
+  :root{
+    --ink:#2a2440;
+    --ink-soft:#6b6390;
+    --paper:#fdf7ff;
+    --line:rgba(120,80,180,.16);
+    --pink:#ff9ed8;
+    --lilac:#c4a7ff;
+    --aqua:#9be8ff;
+    --gold:#ffe3a3;
+    --card:rgba(255,255,255,.72);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,"Hiragino Maru Gothic ProN","Hiragino Sans",sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 0% 0%, rgba(255,158,216,.35), transparent 55%),
+      radial-gradient(120% 80% at 100% 0%, rgba(155,232,255,.35), transparent 55%),
+      radial-gradient(140% 90% at 50% 110%, rgba(196,167,255,.45), transparent 60%),
+      var(--paper);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  /* holographic ambient grain */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.9), transparent),
+      radial-gradient(2px 2px at 70% 60%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,255,255,.85), transparent),
+      radial-gradient(1.5px 1.5px at 85% 20%, rgba(255,255,255,.8), transparent);
+    opacity:.7;
+  }
+  .wrap{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:22px 18px 60px;}
+
+  /* ---- header ---- */
+  header{text-align:center;padding:14px 0 18px;}
+  .logo{
+    font-weight:800;font-size:26px;letter-spacing:.04em;
+    background:linear-gradient(100deg,var(--pink),var(--lilac) 45%,var(--aqua));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 6px rgba(196,167,255,.4));
+  }
+  .logo .spark{ -webkit-text-fill-color:initial; color:var(--gold);}
+  .tagline{margin-top:4px;font-size:12.5px;color:var(--ink-soft);letter-spacing:.12em;}
+
+  /* ---- card shell ---- */
+  .card{
+    background:var(--card);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.6);
+    border-radius:26px;
+    box-shadow:0 10px 30px rgba(150,110,210,.16), inset 0 1px 0 rgba(255,255,255,.8);
+    padding:18px;margin-bottom:16px;
+  }
+  .step-label{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:700;color:var(--ink-soft);
+    letter-spacing:.1em;margin-bottom:12px;
+  }
+  .step-num{
+    width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+    font-size:11px;color:#fff;
+    background:linear-gradient(135deg,var(--pink),var(--lilac));
+  }
+
+  /* ---- upload zone ---- */
+  .drop{
+    position:relative;border-radius:20px;overflow:hidden;
+    border:1.5px dashed rgba(160,120,220,.5);
+    background:linear-gradient(160deg,rgba(255,158,216,.08),rgba(155,232,255,.1));
+    min-height:230px;display:grid;place-items:center;text-align:center;
+    cursor:pointer;transition:.2s;
+  }
+  .drop:active{transform:scale(.99);}
+  .drop .ph{padding:30px 20px;color:var(--ink-soft);}
+  .drop .ph .ico{font-size:40px;}
+  .drop .ph .t{font-size:14px;font-weight:700;margin-top:8px;color:var(--ink);}
+  .drop .ph .s{font-size:12px;margin-top:4px;}
+  .drop img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0;}
+  .drop.has-img{border-style:solid;border-color:rgba(196,167,255,.5);}
+  input[type=file]{display:none;}
+
+  /* ---- style presets ---- */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+  .grid-3 .preset{padding:13px 6px;}
+  .grid-3 .preset .emo{font-size:26px;}
+  .grid-3 .preset .nm{margin-top:5px;font-size:12px;}
+  .preset{
+    border:1.5px solid var(--line);border-radius:16px;
+    background:rgba(255,255,255,.5);
+    padding:11px 6px 10px;text-align:center;cursor:pointer;transition:.16s;
+    position:relative;
+  }
+  .preset:active{transform:scale(.96);}
+  .preset .emo{font-size:24px;line-height:1;}
+  .preset .nm{font-size:11px;font-weight:700;margin-top:6px;color:var(--ink);}
+  .preset .ds{font-size:9.5px;color:var(--ink-soft);margin-top:2px;line-height:1.3;}
+  .preset.on{
+    border-color:transparent;
+    background:linear-gradient(150deg,rgba(255,158,216,.25),rgba(196,167,255,.28),rgba(155,232,255,.25));
+    box-shadow:0 4px 14px rgba(180,140,230,.28), inset 0 0 0 1.5px rgba(196,167,255,.6);
+  }
+  .preset.on::after{
+    content:"✓";position:absolute;top:6px;right:8px;font-size:11px;font-weight:800;
+    color:#fff;background:linear-gradient(135deg,var(--pink),var(--lilac));
+    width:16px;height:16px;border-radius:50%;display:grid;place-items:center;
+  }
+
+  /* ---- slider ---- */
+  .slabel{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+  .slabel .lv{
+    font-weight:800;font-size:15px;
+    background:linear-gradient(100deg,var(--pink),var(--lilac));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  input[type=range]{
+    -webkit-appearance:none;width:100%;height:8px;border-radius:8px;margin:6px 0 4px;
+    background:linear-gradient(90deg,var(--aqua),var(--lilac),var(--pink));
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+    background:#fff;border:3px solid var(--lilac);
+    box-shadow:0 2px 8px rgba(180,140,230,.5);cursor:pointer;
+  }
+  .ticks{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-soft);padding:0 2px;}
+
+  /* ---- go button ---- */
+  .go{
+    width:100%;border:none;border-radius:20px;padding:17px;margin-top:4px;
+    font-size:16px;font-weight:800;letter-spacing:.06em;color:#fff;cursor:pointer;
+    background:linear-gradient(100deg,var(--pink),var(--lilac) 50%,var(--aqua));
+    background-size:200% 100%;
+    box-shadow:0 8px 22px rgba(196,167,255,.45);
+    transition:.2s;
+  }
+  .go:active{transform:translateY(1px) scale(.99);}
+  .go:disabled{opacity:.5;}
+  .go .spark{filter:drop-shadow(0 0 4px rgba(255,255,255,.9));}
+
+  /* ---- result ---- */
+  #result{display:none;}
+  #result.show{display:block;animation:pop .5s ease;}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}
+  .result-frame{
+    position:relative;border-radius:22px;overflow:hidden;
+    background:linear-gradient(135deg,var(--pink),var(--lilac),var(--aqua));
+    padding:3px;
+  }
+  .result-frame img{width:100%;display:block;border-radius:19px;}
+  .result-actions{display:flex;gap:9px;margin-top:12px;}
+  .result-actions a,.result-actions button{
+    flex:1;text-align:center;text-decoration:none;border:none;cursor:pointer;
+    border-radius:14px;padding:13px;font-size:13px;font-weight:700;
+    background:rgba(255,255,255,.7);color:var(--ink);
+    border:1px solid var(--line);
+  }
+  .to-cosme{
+    display:block;text-align:center;text-decoration:none;margin-top:11px;
+    border-radius:16px;padding:15px;font-size:14px;font-weight:800;color:#fff;
+    letter-spacing:.04em;
+    background:linear-gradient(100deg,var(--aqua),var(--lilac) 55%,var(--pink));
+    box-shadow:0 8px 20px rgba(196,167,255,.4);
+  }
+  .home-link{
+    display:block;text-align:center;text-decoration:none;
+    margin:18px auto 0;font-size:13px;font-weight:700;color:var(--ink-soft);
+  }
+
+  /* loading sparkle overlay */
+  .loading{
+    position:fixed;inset:0;z-index:50;display:none;place-items:center;
+    background:rgba(40,30,60,.45);backdrop-filter:blur(6px);
+  }
+  .loading.show{display:grid;}
+  .loading .box{
+    background:var(--card);border-radius:24px;padding:30px 36px;text-align:center;
+    box-shadow:0 14px 40px rgba(120,80,180,.3);
+  }
+  .loading .ring{
+    width:48px;height:48px;margin:0 auto 14px;border-radius:50%;
+    border:4px solid rgba(196,167,255,.25);border-top-color:var(--lilac);
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loading .tx{font-size:13px;font-weight:700;color:var(--ink);}
+
+  /* notice */
+  .notice{
+    font-size:11.5px;color:var(--ink-soft);line-height:1.6;
+    background:rgba(255,255,255,.5);border:1px solid var(--line);
+    border-radius:14px;padding:12px 14px;margin-top:14px;
+  }
+  .notice b{color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">GLOWZ<span class="spark">✦</span>COSME</div>
+    <div class="tagline">変身スタジオ ・ ANIME ME</div>
+  </header>
+
+  <!-- STEP 1 : photo -->
+  <div class="card">
+    <span class="step-label"><span class="step-num">1</span>写真を選ぶ</span>
+    <label class="drop" id="drop">
+      <div class="ph" id="ph">
+        <div class="ico">📷</div>
+        <div class="t">タップして写真をアップ</div>
+        <div class="s">自分の顔写真を選んでね</div>
+      </div>
+      <input type="file" id="file" accept="image/*" />
+    </label>
+  </div>
+
+  <!-- STEP 2 : gender -->
+  <div class="card">
+    <span class="step-label"><span class="step-num">2</span>だれを変身させる？</span>
+    <div class="grid grid-3" id="genders"></div>
+  </div>
+
+  <!-- STEP 3 : style -->
+  <div class="card">
+    <span class="step-label"><span class="step-num">3</span>仕上がりの絵柄を選ぶ</span>
+    <div class="grid" id="presets"></div>
+  </div>
+
+  <!-- STEP 4 : level -->
+  <div class="card">
+    <span class="step-label"><span class="step-num">4</span>盛り具合を調整</span>
+    <div class="slabel">
+      <span style="font-size:12px;color:var(--ink-soft);font-weight:700;">ナチュラル ⇄ 盛りMAX</span>
+      <span class="lv" id="lvText">Lv.3 盛れ</span>
+    </div>
+    <input type="range" id="slider" min="1" max="5" value="3" />
+    <div class="ticks"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+  </div>
+
+  <button class="go" id="go"><span class="spark">✦</span> 変身する <span class="spark">✦</span></button>
+
+  <!-- result -->
+  <div class="card" id="result">
+    <span class="step-label"><span class="step-num">♡</span>変身完了！</span>
+    <div class="result-frame"><img id="resultImg" alt="変身後" /></div>
+    <div class="result-actions">
+      <a id="dl" download="glowz-anime.png">保存する</a>
+      <button id="again">もう一度</button>
+    </div>
+    <a href="./cosme.html" class="to-cosme">♡ このメイクに似合うコスメを探す</a>
+  </div>
+
+  <!-- back to home -->
+  <a href="./index.html" class="home-link">‹ ホームにもどる</a>
+
+  <div class="notice">
+    <b>このデモについて：</b> 見た目と操作を確認するデモです。実際に変身させるには、Vercel に <b>api/animeify.js</b>（次に渡すコード）を置いて、環境変数 <b>GEMINI_API_KEY</b> を設定してください。設置後はこの画面のまま本物のGeminiで動きます。
+  </div>
+</div>
+
+<div class="loading" id="loading">
+  <div class="box">
+    <div class="ring"></div>
+    <div class="tx" id="loadTx">✦ 魔法をかけています ✦</div>
+  </div>
+</div>
+
+<script>
+/* ====== 絵柄プリセット（6種 × 性別で中身が切替） ====== */
+/* prompt[性別] が api/animeify.js に送られ、Geminiへの指示文になる */
+/* girl=女の子 / boy=男の子 / auto=おまかせ */
+const PRESETS = [
+  { id:"natural", emo:"🌸", nm:"ナチュラル盛れ", ds:"透明感",
+    prompt:{
+      girl:"上品で透明感のある日本の少女漫画風アニメイラスト。肌は陶器のようになめらか、瞳は大きくキラキラ、ナチュラルで清楚な美人。",
+      boy:"上品で透明感のある日本のアニメ風イラスト。肌はなめらか、爽やかで清潔感のあるナチュラルイケメン、優しい目元。",
+      auto:"上品で透明感のある日本のアニメ風イラスト。肌はなめらか、瞳ぱっちり、ナチュラルで清楚な美しさ。" } },
+  { id:"cyber", emo:"💎", nm:"サイバーキュート", ds:"ホログラ感",
+    prompt:{
+      girl:"サイバーキュートでホログラフィックな未来的アニメイラスト。虹色に光る質感、ネオンの煌めき、クリスタルのようなアクセサリー、キラキラ感マシマシの可愛い女の子。",
+      boy:"サイバーでホログラフィックな未来的アニメイラスト。虹色に光る質感、ネオンの煌めき、クールで近未来的なイケメン、クリスタルのアクセサリー。",
+      auto:"サイバーでホログラフィックな未来的アニメイラスト。虹色に光る質感、ネオンの煌めき、クリスタルのアクセサリー、キラキラ感マシマシ。" } },
+  { id:"shojo", emo:"✨", nm:"きらきら漫画", ds:"瞳に星",
+    prompt:{
+      girl:"王道のきらきら少女漫画風アニメイラスト。瞳の中に大きな星と光、まつ毛くっきり、頬に淡い赤み、夢いっぱいの華やかな雰囲気の女の子。",
+      boy:"王道のきらきら少年漫画・乙女ゲーム風アニメイラスト。瞳に光、凛々しい眉、爽やかで華やかなイケメンキャラクター。",
+      auto:"王道のきらきら漫画風アニメイラスト。瞳の中に大きな星と光、くっきりした目元、華やかで夢いっぱいの雰囲気。" } },
+  { id:"ulzzang", emo:"🤍", nm:"韓国っぽ", ds:"オルチャン",
+    prompt:{
+      girl:"韓国オルチャン風の垢抜けアニメイラスト。透明感のある白肌、ツヤ唇、洗練されたメイク、おしゃれでクールな可愛い女の子。",
+      boy:"韓国アイドル風の垢抜けアニメイラスト。透明感のある白肌、整った塩顔、おしゃれでクールな雰囲気のイケメン。",
+      auto:"韓国オルチャン・アイドル風の垢抜けアニメイラスト。透明感のある白肌、洗練された雰囲気、おしゃれでクール。" } },
+  { id:"yumekawa", emo:"🦄", nm:"ゆめかわ", ds:"パステル",
+    prompt:{
+      girl:"ゆめかわいいパステルカラーのアニメイラスト。ピンクと水色とラベンダーの夢ふわ配色、ふんわり優しい光、メルヘンで甘い雰囲気の女の子。",
+      boy:"パステルカラーの優しいアニメイラスト。水色とラベンダーの淡い配色、ふんわり優しい光、爽やかで甘い王子様系イケメン。",
+      auto:"ゆめかわいいパステルカラーのアニメイラスト。ピンクと水色とラベンダーの夢ふわ配色、ふんわり優しい光、メルヘンで甘い雰囲気。" } },
+  { id:"cool", emo:"🖤", nm:"クール系", ds:"大人っぽ",
+    prompt:{
+      girl:"クールで大人っぽい美人系アニメイラスト。切れ長の瞳、洗練された表情、上質でモードな雰囲気、凛とした美しい女性。",
+      boy:"クールで大人っぽいイケメン系アニメイラスト。切れ長の瞳、シャープな輪郭、洗練されたモードな雰囲気、凛とした男性。",
+      auto:"クールで大人っぽい美形アニメイラスト。切れ長の瞳、洗練された表情、上質でモードな雰囲気、凛とした美しさ。" } },
+];
+
+/* ====== 性別選択 ====== */
+const GENDERS = [
+  { id:"girl", emo:"👧", nm:"女の子" },
+  { id:"boy",  emo:"👦", nm:"男の子" },
+  { id:"auto", emo:"✨", nm:"おまかせ" },
+];
+let gender = "girl";
+
+const LEVELS = {
+  1:{ tag:"Lv.1 ひかえめ", add:"自然なメイクで控えめに。元の顔立ちをしっかり残す。" },
+  2:{ tag:"Lv.2 ふんわり", add:"ほんのり可愛く盛る。肌をきれいに、瞳を少し大きく。" },
+  3:{ tag:"Lv.3 盛れ", add:"しっかり可愛く盛る。肌つるつる、瞳大きめ、まつ毛くっきり、ツヤ唇。" },
+  4:{ tag:"Lv.4 盛り盛り", add:"かなり盛る。瞳をさらに大きく、ハイライトたっぷり、キラキラ追加、小顔効果。" },
+  5:{ tag:"Lv.5 盛りMAX", add:"最大限に盛る。瞳特大キラキラ、まつ毛ボリューム、ツヤ肌MAX、ラメや光のエフェクト全開、誰もが可愛いと言う仕上がり。" },
+};
+
+/* ====== state ====== */
+let imgData = null;     // base64 (no prefix)
+let imgMime = null;
+let chosen = "natural";
+
+/* ====== render genders ====== */
+const gendersEl = document.getElementById("genders");
+GENDERS.forEach((g,i)=>{
+  const d = document.createElement("div");
+  d.className = "preset" + (i===0?" on":"");
+  d.dataset.id = g.id;
+  d.innerHTML = `<div class="emo">${g.emo}</div><div class="nm">${g.nm}</div>`;
+  d.onclick = ()=>{
+    gender = g.id;
+    gendersEl.querySelectorAll(".preset").forEach(x=>x.classList.remove("on"));
+    d.classList.add("on");
+  };
+  gendersEl.appendChild(d);
+});
+
+/* ====== render presets ====== */
+const presetsEl = document.getElementById("presets");
+PRESETS.forEach((p,i)=>{
+  const d = document.createElement("div");
+  d.className = "preset" + (i===0?" on":"");
+  d.dataset.id = p.id;
+  d.innerHTML = `<div class="emo">${p.emo}</div><div class="nm">${p.nm}</div><div class="ds">${p.ds}</div>`;
+  d.onclick = ()=>{
+    chosen = p.id;
+    document.querySelectorAll(".preset").forEach(x=>x.classList.remove("on"));
+    d.classList.add("on");
+  };
+  presetsEl.appendChild(d);
+});
+
+/* ====== upload ====== */
+const fileInput = document.getElementById("file");
+const drop = document.getElementById("drop");
+const ph = document.getElementById("ph");
+fileInput.onchange = e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    imgData = r.result.split(",")[1];
+    imgMime = f.type;
+    let pv = drop.querySelector("img.preview");
+    if(!pv){ pv = document.createElement("img"); pv.className="preview"; drop.appendChild(pv); }
+    pv.src = r.result;
+    ph.style.display = "none";
+    drop.classList.add("has-img");
+  };
+  r.readAsDataURL(f);
+};
+
+/* ====== slider ====== */
+const slider = document.getElementById("slider");
+const lvText = document.getElementById("lvText");
+slider.oninput = ()=>{ lvText.textContent = LEVELS[slider.value].tag; };
+
+/* ====== go ====== */
+const loading = document.getElementById("loading");
+const loadTx = document.getElementById("loadTx");
+const resultCard = document.getElementById("result");
+const resultImg = document.getElementById("resultImg");
+const dl = document.getElementById("dl");
+
+document.getElementById("go").onclick = async ()=>{
+  if(!imgData){ alert("まず写真を選んでね📷"); return; }
+  const preset = PRESETS.find(p=>p.id===chosen);
+  const lv = LEVELS[slider.value];
+  const stylePrompt = preset.prompt[gender] || preset.prompt.auto;
+  const subject = gender==="boy" ? "この写真の人物を爽やかでかっこよくアニメ化してください"
+                 : gender==="girl" ? "この写真の人物を可愛くアニメ化してください"
+                 : "この写真の人物を魅力的にアニメ化してください";
+  const fullPrompt =
+    `${subject}。本人だとわかる顔立ちは残しつつ、次のスタイルで描いてください。` +
+    `【絵柄】${stylePrompt}【盛り具合】${lv.add}` +
+    `背景もスタイルに合わせて美しく。高画質、正方形に近い構図、顔がはっきり見えるように。`;
+
+  loading.classList.add("show");
+  loadTx.textContent = "✦ 魔法をかけています ✦";
+
+  try{
+    const res = await fetch("/api/animeify", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ imageBase64: imgData, mimeType: imgMime, prompt: fullPrompt })
+    });
+
+    if(!res.ok){
+      const t = await res.text();
+      throw new Error("server " + res.status + ": " + t);
+    }
+    const data = await res.json();
+    if(!data.imageBase64) throw new Error(data.error || "画像が返りませんでした");
+
+    const url = "data:" + (data.mimeType||"image/png") + ";base64," + data.imageBase64;
+    resultImg.src = url;
+    dl.href = url;
+    resultCard.classList.add("show");
+    loading.classList.remove("show");
+    resultCard.scrollIntoView({behavior:"smooth", block:"center"});
+  }catch(err){
+    loading.classList.remove("show");
+    // デモ環境（api未設置）でも操作確認できるように案内
+    alert("まだ変身できません💦\n\nVercelに api/animeify.js を設置して、環境変数 GEMINI_API_KEY を登録すると本物のGeminiで動きます。\n\n（詳細：" + err.message + "）");
+  }
+};
+
+document.getElementById("again").onclick = ()=>{
+  resultCard.classList.remove("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+</script>
+</body>
+</html>

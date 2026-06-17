@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>GLOWZ✦COSME</title>
+<style>
+  :root{
+    --ink:#2a2440;
+    --ink-soft:#6b6390;
+    --paper:#fdf7ff;
+    --line:rgba(120,80,180,.16);
+    --pink:#ff9ed8;
+    --lilac:#c4a7ff;
+    --aqua:#9be8ff;
+    --gold:#ffe3a3;
+    --card:rgba(255,255,255,.72);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,"Hiragino Maru Gothic ProN","Hiragino Sans",sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 0% 0%, rgba(255,158,216,.38), transparent 55%),
+      radial-gradient(120% 80% at 100% 0%, rgba(155,232,255,.38), transparent 55%),
+      radial-gradient(140% 90% at 50% 110%, rgba(196,167,255,.5), transparent 60%),
+      var(--paper);
+    min-height:100vh;overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(2px 2px at 18% 22%, rgba(255,255,255,.9), transparent),
+      radial-gradient(2px 2px at 72% 48%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1.5px 1.5px at 38% 78%, rgba(255,255,255,.85), transparent),
+      radial-gradient(1.5px 1.5px at 88% 16%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1.5px 1.5px at 55% 90%, rgba(255,255,255,.8), transparent);
+    opacity:.75;
+  }
+  .wrap{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:40px 20px 50px;}
+
+  /* hero */
+  .hero{text-align:center;margin-bottom:30px;}
+  .logo{
+    font-weight:800;font-size:40px;letter-spacing:.03em;line-height:1.1;
+    background:linear-gradient(100deg,var(--pink),var(--lilac) 45%,var(--aqua));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 2px 10px rgba(196,167,255,.45));
+  }
+  .logo .spark{-webkit-text-fill-color:initial;color:var(--gold);
+    display:inline-block;animation:twinkle 2.4s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:1;transform:scale(1) rotate(0);}50%{opacity:.55;transform:scale(.8) rotate(20deg);}}
+  .catch{margin-top:12px;font-size:14px;color:var(--ink-soft);letter-spacing:.08em;line-height:1.7;}
+
+  /* 2 big cards */
+  .menu{display:flex;flex-direction:column;gap:18px;margin-top:8px;}
+  .tile{
+    position:relative;display:block;text-decoration:none;color:inherit;
+    border-radius:28px;overflow:hidden;cursor:pointer;
+    border:1px solid rgba(255,255,255,.65);
+    box-shadow:0 12px 32px rgba(150,110,210,.2), inset 0 1px 0 rgba(255,255,255,.85);
+    transition:.2s;
+    min-height:168px;
+  }
+  .tile:active{transform:scale(.98);}
+  .tile .bg{position:absolute;inset:0;z-index:0;}
+  .tile-makeup .bg{background:linear-gradient(135deg,rgba(255,158,216,.85),rgba(196,167,255,.85));}
+  .tile-cosme  .bg{background:linear-gradient(135deg,rgba(155,232,255,.85),rgba(196,167,255,.8));}
+  .tile .shine{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 48%,transparent 60%);
+    transform:translateX(-30%);
+    animation:sweep 5s ease-in-out infinite;
+  }
+  .tile-cosme .shine{animation-delay:2.5s;}
+  @keyframes sweep{0%,70%{transform:translateX(-60%);}85%{transform:translateX(60%);}100%{transform:translateX(60%);}}
+  .tile .inner{
+    position:relative;z-index:2;padding:26px 24px;height:100%;
+    display:flex;flex-direction:column;justify-content:center;color:#fff;
+    text-shadow:0 1px 8px rgba(120,70,160,.35);
+  }
+  .tile .emo{font-size:46px;line-height:1;filter:drop-shadow(0 2px 6px rgba(120,70,160,.3));}
+  .tile .ttl{font-size:24px;font-weight:800;margin-top:12px;letter-spacing:.04em;}
+  .tile .sub{font-size:13px;margin-top:6px;opacity:.95;line-height:1.6;font-weight:500;}
+  .tile .go{
+    position:absolute;right:22px;bottom:22px;z-index:2;
+    width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(255,255,255,.9);color:var(--ink);font-size:18px;font-weight:800;
+    box-shadow:0 4px 12px rgba(120,70,160,.25);
+  }
+
+  /* footer mini links */
+  .foot{margin-top:30px;text-align:center;font-size:11.5px;color:var(--ink-soft);letter-spacing:.06em;}
+  .foot .dot{margin:0 8px;opacity:.5;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="logo">GLOWZ<span class="spark">✦</span>COSME</div>
+    <div class="catch">なりたい自分に変身して、<br>似合うコスメに出会う。</div>
+  </div>
+
+  <div class="menu">
+
+    <a class="tile tile-makeup" href="./makeup.html">
+      <div class="bg"></div><div class="shine"></div>
+      <div class="inner">
+        <div class="emo">💎</div>
+        <div class="ttl">変身スタジオ</div>
+        <div class="sub">写真をアップして、なりたい絵柄で<br>盛れた自分にアニメ変身✦</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+
+    <a class="tile tile-cosme" href="./cosme.html">
+      <div class="bg"></div><div class="shine"></div>
+      <div class="inner">
+        <div class="emo">🛍️</div>
+        <div class="ttl">コスメ検索</div>
+        <div class="sub">気になるコスメを楽天市場から検索。<br>変身した顔に似合う一品を探そう♡</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+
+  </div>
+
+  <div class="foot">
+    GLOWZ✦COSME <span class="dot">·</span> beauty studio
+  </div>
+
+</div>
+</body>
+</html>
